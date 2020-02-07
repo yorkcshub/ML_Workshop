@@ -11,7 +11,7 @@ from resizeimage import resizeimage
 def load_model():
     # load json and create model
     with open('model.json', 'r') as f:
-        model_json = json_file.read()
+        model_json = f.read()
     model = model_from_json(model_json)
     # load weights into new model
     model.load_weights("model.h5")
@@ -26,7 +26,7 @@ def convert_image(path):
     img = Image.open(path)
     img.convert('L') # convert to grayscale
     img = crop_center(img, min(img.size), min(img.size))
-    img.thumbnail((28, 28), Image.ANTIALIAS)
+    -
     img.save('img2.jpg', 'JPEG')
 
     img_np = np.asarray(img.getdata(), dtype=np.int) # convert image into ndarray
