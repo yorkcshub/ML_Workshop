@@ -25,7 +25,7 @@ def convert_image(path):
     img = Image.open(path)
     img.convert('L') # convert to grayscale
     img = crop_center(img, min(img.size), min(img.size))
-
+    img.thumbnail((28, 28), Image.ANTIALIAS)]
     img.save('img2.jpg', 'JPEG')
 
     img_np = np.asarray(img.getdata(), dtype=np.int) # convert image into ndarray
