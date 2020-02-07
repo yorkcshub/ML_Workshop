@@ -6,7 +6,6 @@ from keras.models import model_from_json
 from keras.optimizers import RMSprop
 #
 from PIL import Image
-from resizeimage import resizeimage
 
 def load_model():
     # load json and create model
@@ -26,7 +25,7 @@ def convert_image(path):
     img = Image.open(path)
     img.convert('L') # convert to grayscale
     img = crop_center(img, min(img.size), min(img.size))
-    -
+
     img.save('img2.jpg', 'JPEG')
 
     img_np = np.asarray(img.getdata(), dtype=np.int) # convert image into ndarray
