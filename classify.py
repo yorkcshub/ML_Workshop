@@ -9,7 +9,13 @@ from PIL import Image
 from resizeimage import resizeimage
 
 def load_model():
-    # add code below:
+    # load json and create model
+    with open('model.json', 'r') as f:
+        model_json = json_file.read()
+    model = model_from_json(model_json)
+    # load weights into new model
+    model.load_weights("model.h5")
+    model.compile(loss='categorical_crossentropy', optimizer=RMSprop(0.01), metrics=['accuracy'])
     return model
 
 def predict(model, df):
@@ -17,7 +23,19 @@ def predict(model, df):
     return y_prediction[0]
 
 def convert_image(path):
-    # add code below:
+    img = Image.open(path)
+    img.convert('L') # convert to grayscale
+    img = crop_center(img, min(img.size), min(img.size))
+    img.thumbnail((28, 28), Image.ANTIALIAS)
+    img.save('img2.jpg', 'JPEG')
+
+    img_np = np.asarray(img.getdata(), dtype=np.int) # convert image into ndarray
+    img_np = np.dot(img_np[...,:3], [0.2989, 0.5870, 0.1140])[np.newaxis] # convert rgb into greyscale
+    img_np = np.around(img_np).astype(int) # round ndrray into integers
+    img_np = np.absolute(np.subtract(img_np, 255)) # flip the black and white values
+
+    df = pd.DataFrame(img_np)
+
     return df
 
 def crop_center(pil_img, crop_width, crop_height):
